@@ -155,6 +155,19 @@ class PDF
     public function setPdfA(bool $enabled = true): self
     {
         $this->dompdf->getOptions()->setIsPdfAEnabled($enabled);
+        $this->dompdf->getOptions()->setIsFontSubsettingEnabled($enabled);
+        $this->dompdf->getOptions()->setDefaultFont("DejaVu Sans");
+
+        $font_metrics = $this->dompdf->getFontMetrics();
+        $font_metrics->setFontFamily("courier", $font_metrics->getFamily("DejaVu Sans Mono"));
+        $font_metrics->setFontFamily("fixed", $font_metrics->getFamily("DejaVu Sans Mono"));
+        $font_metrics->setFontFamily("helvetica", $font_metrics->getFamily("DejaVu Sans"));
+        $font_metrics->setFontFamily("monospace", $font_metrics->getFamily("DejaVu Sans Mono"));
+        $font_metrics->setFontFamily("sans-serif", $font_metrics->getFamily("DejaVu Sans"));
+        $font_metrics->setFontFamily("serif", $font_metrics->getFamily("DejaVu Serif"));
+        $font_metrics->setFontFamily("times", $font_metrics->getFamily("DejaVu Serif"));
+        $font_metrics->setFontFamily("times-roman", $font_metrics->getFamily("DejaVu Serif"));
+
         return $this;
     }
 
