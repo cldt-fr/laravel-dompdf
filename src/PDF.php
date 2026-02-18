@@ -144,6 +144,21 @@ class PDF
     }
 
     /**
+     * Enable or disable PDF/A-3b compliance.
+     *
+     * PDF/A requires all fonts to be embedded. Core PDF fonts (Helvetica,
+     * Courier, Times) are NOT embedded and will cause validation failures.
+     * Use fonts like DejaVu Sans/Serif instead.
+     *
+     * Requires dompdf >= 3.1.0 and the CPDF backend.
+     */
+    public function setPdfA(bool $enabled = true): self
+    {
+        $this->dompdf->getOptions()->setIsPdfAEnabled($enabled);
+        return $this;
+    }
+
+    /**
      * Set/Change an option (or array of options) in Dompdf
      *
      * @param array<string, mixed>|string $attribute
@@ -257,6 +272,46 @@ class PDF
             }
         }
         $this->rendered = true;
+    }
+
+    /**
+     * Add an embedded file attachment to the PDF (useful for Zugferd/Factur-X).
+     *
+     * Requires PDF/A mode to be enabled and the CPDF backend.
+     */
+    public function addEmbeddedFile(string $filePath, string $name, string $description = '', string $mimeType = 'text/xml'): self
+    {
+        if (!$this->rendered) {
+            $this->render();
+        }
+
+        $canvas = $this->dompdf->getCanvas();
+        if (! $canvas instanceof CPDF) {
+            throw new \RuntimeException('Embedded files are only supported when using CPDF');
+        }
+
+        $canvas->get_cpdf()->addEmbeddedFile($filePath, $name, $description, $mimeType);
+        return $this;
+    }
+
+    /**
+     * Set additional XMP RDF metadata (useful for Zugferd/Factur-X).
+     *
+     * Requires PDF/A mode to be enabled and the CPDF backend.
+     */
+    public function setAdditionalXmpRdf(string $xmpRdf): self
+    {
+        if (!$this->rendered) {
+            $this->render();
+        }
+
+        $canvas = $this->dompdf->getCanvas();
+        if (! $canvas instanceof CPDF) {
+            throw new \RuntimeException('Additional XMP RDF is only supported when using CPDF');
+        }
+
+        $canvas->get_cpdf()->setAdditionalXmpRdf($xmpRdf);
+        return $this;
     }
 
     /** @param array<string> $pc */

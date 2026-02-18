@@ -20,6 +20,23 @@ return [
      */
     'convert_entities' => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | PDF/A Compliance
+    |--------------------------------------------------------------------------
+    |
+    | PDF/A-3b compliance mode for archival-quality PDFs.
+    | Requires dompdf >= 3.1.0 and the CPDF backend.
+    |
+    | IMPORTANT: PDF/A requires all fonts to be embedded. Core PDF fonts
+    | (Helvetica, Courier, Times) are NOT embedded and will cause validation
+    | failures. Use fonts like DejaVu Sans/Serif instead.
+    |
+    */
+    'pdfa' => [
+        'enabled' => false,
+    ],
+
     'options' => [
         /**
          * The location of the DOMPDF font directory
