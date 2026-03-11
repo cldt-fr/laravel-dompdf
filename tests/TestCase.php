@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\View;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
+    public static $latestResponse = null;
+
     protected function setUp() : void
     {
         parent::setUp();
